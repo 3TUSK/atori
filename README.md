@@ -69,3 +69,7 @@ pip3 install -r requirements.txt
 ### Deploy to production env
 
 WIP
+
+```bash
+gunicorn -w 4 -b 127.0.0.1:8080 -k gevent app:app
+```
