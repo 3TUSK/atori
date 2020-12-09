@@ -1,5 +1,6 @@
 Flask
 Flask-Caching
+flask-cors
 gevent
 gunicorn
 redis

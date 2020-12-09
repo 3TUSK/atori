@@ -3,6 +3,7 @@
 
 from flask import Flask, request
 from flask_caching import Cache
+from flask_cors import CORS
 import hashlib
 import os
 import os.path
@@ -19,6 +20,7 @@ app.config.from_mapping({
     'MAX_CONTENT_LENGTH': 1 << 20 # 1MiB, not sure if anyone will have this large files
 })
 cache = Cache(app)
+CORS(app)
 
 def hash_file(f):
     chksum = hashlib.sha256(f.read()).hexdigest()
@@ -45,7 +47,7 @@ def make_dvi(f, chksum, engine = 'latex'):
     return os.path.join(work_dir, f"{base_name}.dvi")
 
 def make_svg(file_path):
-    dvi_to_svg = subprocess.run(['dvisvgm', '--no-font=1', '--clipjoin', '--bbox=min', '--exact', '--stdout', file_path], capture_output = True)
+    dvi_to_svg = subprocess.run(['dvisvgm', '--no-font=1', '--clipjoin', '--bbox=min', '--exact-bbox', '--zoom=1.28', '--stdout', file_path], capture_output = True)
     dvi_to_svg.check_returncode()
     return dvi_to_svg.stdout.decode("utf-8")
 
